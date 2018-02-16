@@ -1369,6 +1369,10 @@ var ARVideoRenderer = function () {
         if (_this.passThroughCamera.textureWidth === 0 || _this.passThroughCamera.textureHeight === 0) {
           return;
         }
+        var previousFlipY = gl.getParameter(gl.UNPACK_FLIP_Y_WEBGL);
+        var previousWinding = gl.getParameter(gl.FRONT_FACE);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.frontFace(gl.CCW);
         gl.useProgram(_this.program);
         gl.bindBuffer(gl.ARRAY_BUFFER, _this.vertexPositionBuffer);
         gl.enableVertexAttribArray(_this.vertexPositionAttribute);
@@ -1392,6 +1396,8 @@ var ARVideoRenderer = function () {
         }
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, _this.indexBuffer);
         gl.drawElements(gl.TRIANGLES, _this.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, previousFlipY);
+        gl.frontFace(previousWinding);
       });
     }
   }]);
