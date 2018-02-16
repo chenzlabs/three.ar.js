@@ -327,6 +327,12 @@ class ARVideoRenderer {
 
       // The texture from ARKit is not power of 2 friendly so these parameters
       // are needed.
+      let previousTextureWrapS =
+        gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S);
+      let previousTextureWrapT =
+        gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T);
+      let previousTextureMinFilter =
+        gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER);
       if (window.WebARonARKitSendsCameraFrames) {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -343,8 +349,16 @@ class ARVideoRenderer {
       );
 
       // Restore previous values.
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, previousFlipY);
+      // unneeded... gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, previousFlipY);
       gl.frontFace(previousWinding);
+      if (window.WebARonARKitSendsCameraFrames) {
+        gl.texParameteri(
+          gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, previousTextureWrapS);
+        gl.texParameteri(
+          gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, previousTextureWrapT);
+        gl.texParameteri(
+          gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, previousTextureMinFilter);
+      }
     });
   }
 }
