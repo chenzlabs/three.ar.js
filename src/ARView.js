@@ -265,6 +265,13 @@ class ARVideoRenderer {
           this.passThroughCamera.textureHeight === 0) {
         return;
       }
+
+      // Save and configure values we need.
+      let previousFlipY = gl.getParameter(gl.UNPACK_FLIP_Y_WEBGL);
+      let previousWinding = gl.getParameter(gl.FRONT_FACE);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      gl.frontFace(gl.CCW);
+      
       gl.useProgram(this.program);
       gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
       gl.enableVertexAttribArray(this.vertexPositionAttribute);
@@ -334,6 +341,10 @@ class ARVideoRenderer {
         gl.UNSIGNED_SHORT,
         0
       );
+
+      // Restore previous values.
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, previousFlipY);
+      gl.frontFace(previousWinding);
     });
   }
 }
