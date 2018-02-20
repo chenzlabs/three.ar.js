@@ -257,6 +257,7 @@ class ARVideoRenderer {
       gl.ARRAY_BUFFER_BINDING,
       gl.ELEMENT_ARRAY_BUFFER_BINDING,
       gl.CURRENT_PROGRAM,
+      gl.TEXTURE_BINDING_2D,
     ];
 
     preserveGLState(gl, bindings, () => {
